@@ -5,7 +5,7 @@ Fast yet accurate trigonometric functions
 Namsepace FTA has 3 sets of functions:
 
     Scalar: standard trigonometric functions
-    Packed Scalar: same functions computing 4 or 8 values at the same time (using SSE4.1/AVX if available)
+    Packed Scalar: same functions computing 4 or 8 values at the same time (using SSE4.1/FMA if available)
   
 
 FTA Accuracy:
@@ -29,7 +29,7 @@ FTA Speed up (SSE, MSVC2012 x64):
 FTA Speed up (AVX, g++ 13.2, -O3):
 
     FTA::sincos speed up: x0.63 (from standard sin+cos)
-    FTA::sin_ps/cos_ps speed up: x11.2 (from standard sin/cos)
-    FTA::sincos_ps speed up: x9.9 (from standard sin+cos)
+    FTA::sin_ps/cos_ps speed up: x11.8 (from standard sin/cos)
+    FTA::sincos_ps speed up: x10.4 (from standard sin+cos)
 
 Distributed under Revised BSD License
