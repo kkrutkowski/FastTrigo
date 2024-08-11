@@ -35,6 +35,6 @@ FTA Speed up (AVX, g++ 13.2 -O3):
     FTA::sqrt_ps speed up: x0.0 (from standard sqrt)
     FTA::atan2_ps speed up: x0.0 (from standard atan2)
     FTA::sin_ps/cos_ps speed up: x11.2 (from standard sin/cos)
-    FTA::sincos_ps speed up: x0.0 (from standard sin+cos)
+    FTA::sincos_ps speed up: x9.9 (from standard sin+cos)
 
 Distributed under Revised BSD License
