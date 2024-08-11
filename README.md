@@ -5,7 +5,7 @@ Fast yet accurate trigonometric functions
 Namsepace FTA has 3 sets of functions:
 
     Scalar: standard trigonometric functions
-    Packed Scalar: same functions computing 4 or 8 values at the same time (using SSE/SSE2/SSE3/SSE4.1/AVX/AVX2 if available)
+    Packed Scalar: same functions computing 4 or 8 values at the same time (using SSE4.1/AVX if available)
   
 
 FTA Accuracy:
