@@ -15,7 +15,7 @@ FTA Accuracy:
     FTA::cos/cos_ps max error: 0.0007%
     FTA::sin/sin_ps max error: 0.0007%
 
-FTA Speed up (MSVC2012 x64):
+FTA Speed up (SSE, MSVC2012 x64):
 
     FTA::sqrt speed up: x1.5 (from standard sqrt)
     FTA::atan2 speed up: x1.7 (from standard atan2)
@@ -25,5 +25,16 @@ FTA Speed up (MSVC2012 x64):
     FTA::atan2_ps speed up: x5.2 (from standard atan2)
     FTA::sin_ps/cos_ps speed up: x4.3 (from standard sin/cos)
     FTA::sincos_ps speed up: x5.2 (from standard sin+cos)
+
+FTA Speed up (AVX, G++ 13.2):
+
+    FTA::sqrt speed up: x0.0 (from standard sqrt)
+    FTA::atan2 speed up: x0.0 (from standard atan2)
+    FTA::sin/cos speed up: x0.0 (from standard sin/cos)
+    FTA::sincos speed up: x0.0 (from standard sin+cos)
+    FTA::sqrt_ps speed up: x0.0 (from standard sqrt)
+    FTA::atan2_ps speed up: x0.0 (from standard atan2)
+    FTA::sin_ps/cos_ps speed up: x0.0 (from standard sin/cos)
+    FTA::sincos_ps speed up: x0.0 (from standard sin+cos)
 
 Distributed under Revised BSD License
