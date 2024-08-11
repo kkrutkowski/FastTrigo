@@ -69,6 +69,18 @@ namespace FTA{
     void   sincos_ps(__m128 angle, __m128 *sin, __m128 *cos);
     void   interleave_ps(__m128 x0x1x2x3, __m128 y0y1y2y3, __m128 *x0y0x1y1, __m128 *x2y2x3y3);
     void   deinterleave_ps(__m128 x0y0x1y1, __m128 x2y2x3y3, __m128 *x0x1x2x3, __m128 *y0y1y2y3);
+
+    __m256 sqrt_ps(__m256 squared);
+    __m256 length_ps(__m256 x, __m256 y);
+    __m256 length_ps(__m256 x, __m256 y, __m256 z);
+    __m256 atan_ps(__m256 x);
+    __m256 atan2_ps(__m256 y, __m256 x);
+    __m256 cos_52s_ps(__m256 x);
+    __m256 cos_ps(__m256 angle);
+    __m256 sin_ps(__m256 angle);
+    void   sincos_ps(__m256 angle, __m256 *sin, __m256 *cos);
+    void   interleave_ps(__m256 x0x1x2x3, __m256 y0y1y2y3, __m256 *x0y0x1y1, __m256 *x2y2x3y3);
+    void   deinterleave_ps(__m256 x0y0x1y1, __m256 x2y2x3y3, __m256 *x0x1x2x3, __m256 *y0y1y2y3);
 };
 
 #endif // FASTTRIGO_H
