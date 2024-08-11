@@ -310,7 +310,8 @@ __m256 FTA::atan2_ps(__m256 y, __m256 x){
     return _mm256_add_ps(atan,shift);
 }
 
-
+//Uncomment and comment definition below for machines not supporting FMA
+/*
 __m256 FTA::cos_52s_ps(__m256 x){
     const __m256 c1=_mm256_set1_ps( 0.9999932946f);
     const __m256 c2=_mm256_set1_ps(-0.4999124376f);
@@ -320,6 +321,23 @@ __m256 FTA::cos_52s_ps(__m256 x){
     x2=_mm256_mul_ps(x,x);
     //               (c1+           x2*          (c2+           x2*          (c3+           c4*x2)));
     return _mm256_add_ps(c1,_mm256_mul_ps(x2,_mm256_add_ps(c2,_mm256_mul_ps(x2,_mm256_add_ps(c3,_mm256_mul_ps(c4,x2))))));
+}
+*/
+
+// FMA implementation
+__m256 FTA::cos_52s_ps(__m256 x) {
+    const __m256 c1 = _mm256_set1_ps(0.9999932946f);
+    const __m256 c2 = _mm256_set1_ps(-0.4999124376f);
+    const __m256 c3 = _mm256_set1_ps(0.0414877472f);
+    const __m256 c4 = _mm256_set1_ps(-0.0012712095f);
+    __m256 x2 = _mm256_mul_ps(x, x);
+
+    // Using FMA instructions for more efficient computation
+    __m256 result = _mm256_fmadd_ps(c4, x2, c3); // c3 + c4 * x2
+    result = _mm256_fmadd_ps(result, x2, c2);    // c2 + (c3 + c4 * x2) * x2
+    result = _mm256_fmadd_ps(result, x2, c1);    // c1 + (c2 + (c3 + c4 * x2) * x2) * x2
+
+    return result;
 }
 
 __m256 FTA::cos_ps(__m256 angle){
