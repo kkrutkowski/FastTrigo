@@ -26,11 +26,11 @@ FTA Speed up (SSE, MSVC2012 x64):
     FTA::sin_ps/cos_ps speed up: x4.3 (from standard sin/cos)
     FTA::sincos_ps speed up: x5.2 (from standard sin+cos)
 
-FTA Speed up (AVX, g++ 13.2):
+FTA Speed up (AVX, g++ 13.2 -O3):
 
     FTA::sqrt speed up: x0.0 (from standard sqrt)
     FTA::atan2 speed up: x0.0 (from standard atan2)
-    FTA::sin/cos speed up: x0.0 (from standard sin/cos)
+    FTA::sin/cos speed up: x11.2 (from standard sin/cos)
     FTA::sincos speed up: x0.0 (from standard sin+cos)
     FTA::sqrt_ps speed up: x0.0 (from standard sqrt)
     FTA::atan2_ps speed up: x0.0 (from standard atan2)
