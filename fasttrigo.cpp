@@ -33,21 +33,19 @@ namespace FTA
     __m128 cos_52s_ps(__m128 x);
 };
 
-float FTA::sqrt(float squared)
-{
+float FTA::sqrt(float squared){
     return _mm_cvtss_f32(_mm_sqrt_ss(_mm_set_ss(squared)));
 }
-float FTA::length(float x, float y)
-{
+
+float FTA::length(float x, float y){
     return FTA::sqrt(x*x+y*y);
 }
-float FTA::length(float x, float y, float z)
-{
+
+float FTA::length(float x, float y, float z){
     return FTA::sqrt(x*x+y*y+z*z);
 }
 
-float FTA::atan(float x)
-{
+float FTA::atan(float x){
     float u=x*x;
     float u2=u*u;
     float u3=u2*u;
@@ -55,8 +53,8 @@ float FTA::atan(float x)
     float f=1.f+0.33288950512027f*u-0.08467922817644f*u2+0.03252232640125f*u3-0.00749305860992f*u4;
     return x/f;
 }
-float FTA::atan2(float y, float x)
-{
+
+float FTA::atan2(float y, float x){
     if(fabs(x)>fabs(y)) {
         float atan=FTA::atan(y/x);
         if(x>0.f)
@@ -72,8 +70,7 @@ float FTA::atan2(float y, float x)
     }
 }
 
-float FTA::cos_52s(float x)
-{
+float FTA::cos_52s(float x){
     const float c1= 0.9999932946f;
     const float c2=-0.4999124376f;
     const float c3= 0.0414877472f;
@@ -82,6 +79,7 @@ float FTA::cos_52s(float x)
     x2=x*x;
     return (c1 + x2*(c2 + x2*(c3 + c4*x2)));
 }
+
 float FTA::cos(float angle){
     //clamp to the range 0..2pi
     angle=angle-floorf(angle*invtwopi)*twopi;
@@ -92,9 +90,11 @@ float FTA::cos(float angle){
     if(angle<threehalfpi) return -FTA::cos_52s(angle-pi);
     return FTA::cos_52s(twopi-angle);
 }
+
 float FTA::sin(float angle){
     return FTA::cos(halfpi-angle);
 }
+
 void FTA::sincos(float angle, float *sin, float *cos){
     //clamp to the range 0..2pi
     angle=angle-floorf(angle*invtwopi)*twopi;
@@ -106,28 +106,32 @@ void FTA::sincos(float angle, float *sin, float *cos){
         *sin=sinmultiplier*FTA::sqrt(1.f-*cos**cos);
         return;
     }
+    
     if(angle<pi) {
         *cos=-FTA::cos_52s(pi-angle);
         *sin=sinmultiplier*FTA::sqrt(1.f-*cos**cos);
         return;
     }
+    
     if(angle<threehalfpi) {
         *cos=-FTA::cos_52s(angle-pi);
         *sin=sinmultiplier*FTA::sqrt(1.f-*cos**cos);
         return;
     }
+    
     *cos=FTA::cos_52s(twopi-angle);
     *sin=sinmultiplier*FTA::sqrt(1.f-*cos**cos);
     return;
 }
 
+
+
 //PACKED SCALAR
-__m128 FTA::sqrt_ps(__m128 squared)
-{
+__m128 FTA::sqrt_ps(__m128 squared){
     return _mm_sqrt_ps(squared);
 }
-__m128 FTA::length_ps(__m128 x, __m128 y)
-{
+
+__m128 FTA::length_ps(__m128 x, __m128 y){
     return FTA::sqrt_ps(_mm_add_ps(_mm_mul_ps(x,x),_mm_mul_ps(y,y)));
 }
 __m128 FTA::length_ps(__m128 x, __m128 y, __m128 z)
@@ -135,8 +139,9 @@ __m128 FTA::length_ps(__m128 x, __m128 y, __m128 z)
     return FTA::sqrt_ps(_mm_add_ps(_mm_add_ps(_mm_mul_ps(x,x),_mm_mul_ps(y,y)),_mm_mul_ps(z,z)));
 }
 
-__m128 FTA::atan_ps(__m128 x)
-{
+
+
+__m128 FTA::atan_ps(__m128 x){
     __m128 u=_mm_mul_ps(x,x);
     __m128 u2=_mm_mul_ps(u,u);
     __m128 u3=_mm_mul_ps(u2,u);
@@ -150,8 +155,8 @@ __m128 FTA::atan_ps(__m128 x)
     _mm_mul_ps(_mm_set1_ps(-0.00749305860992f),u4));
     return _mm_div_ps(x,f);
 }
-__m128 FTA::atan2_ps(__m128 y, __m128 x)
-{
+
+__m128 FTA::atan2_ps(__m128 y, __m128 x){
     __m128 absxgreaterthanabsy=_mm_cmpgt_ps(_mm_andnot_ps(SIGNMASK,x),_mm_andnot_ps(SIGNMASK,y));
     __m128 ratio=_mm_div_ps(_mm_add_ps(_mm_and_ps(absxgreaterthanabsy,y),_mm_andnot_ps(absxgreaterthanabsy,x)),
                             _mm_add_ps(_mm_and_ps(absxgreaterthanabsy,x),_mm_andnot_ps(absxgreaterthanabsy,y)));
@@ -170,8 +175,8 @@ __m128 FTA::atan2_ps(__m128 y, __m128 x)
     return _mm_add_ps(atan,shift);
 }
 
-__m128 FTA::cos_52s_ps(__m128 x)
-{
+
+__m128 FTA::cos_52s_ps(__m128 x){
     const __m128 c1=_mm_set1_ps( 0.9999932946f);
     const __m128 c2=_mm_set1_ps(-0.4999124376f);
     const __m128 c3=_mm_set1_ps( 0.0414877472f);
@@ -181,6 +186,7 @@ __m128 FTA::cos_52s_ps(__m128 x)
     //               (c1+           x2*          (c2+           x2*          (c3+           c4*x2)));
     return _mm_add_ps(c1,_mm_mul_ps(x2,_mm_add_ps(c2,_mm_mul_ps(x2,_mm_add_ps(c3,_mm_mul_ps(c4,x2))))));
 }
+
 __m128 FTA::cos_ps(__m128 angle){
     //clamp to the range 0..2pi
 
@@ -201,12 +207,16 @@ __m128 FTA::cos_ps(__m128 angle){
     result=_mm_xor_ps(result,_mm_and_ps(_mm_and_ps(_mm_cmpge_ps(angle,_mm_set1_ps(halfpi)),_mm_cmplt_ps(angle,_mm_set1_ps(threehalfpi))),SIGNMASK));
     return result;
 }
+
 __m128 FTA::sin_ps(__m128 angle){
     return FTA::cos_ps(_mm_sub_ps(_mm_set1_ps(halfpi),angle));
 }
+
+
+
+
 void FTA::sincos_ps(__m128 angle, __m128 *sin, __m128 *cos){
     __m128 anglesign=_mm_or_ps(_mm_set1_ps(1.f),_mm_and_ps(SIGNMASK,angle));
-
     //clamp to the range 0..2pi
 
     //take absolute value
@@ -232,13 +242,14 @@ void FTA::sincos_ps(__m128 angle, __m128 *sin, __m128 *cos){
     return;
 }
 
-void FTA::interleave_ps(__m128 x0x1x2x3, __m128 y0y1y2y3, __m128 *x0y0x1y1, __m128 *x2y2x3y3)
-{
+
+void FTA::interleave_ps(__m128 x0x1x2x3, __m128 y0y1y2y3, __m128 *x0y0x1y1, __m128 *x2y2x3y3){
     *x0y0x1y1=_mm_unpacklo_ps(x0x1x2x3,y0y1y2y3);
     *x2y2x3y3=_mm_unpackhi_ps(x0x1x2x3,y0y1y2y3);
 }
-void FTA::deinterleave_ps(__m128 x0y0x1y1, __m128 x2y2x3y3, __m128 *x0x1x2x3, __m128 *y0y1y2y3)
-{
+
+
+void FTA::deinterleave_ps(__m128 x0y0x1y1, __m128 x2y2x3y3, __m128 *x0x1x2x3, __m128 *y0y1y2y3){
     *x0x1x2x3=_mm_shuffle_ps(x0y0x1y1,x2y2x3y3,_MM_SHUFFLE(2,0,2,0));
     *y0y1y2y3=_mm_shuffle_ps(x0y0x1y1,x2y2x3y3,_MM_SHUFFLE(3,1,3,1));
 }
