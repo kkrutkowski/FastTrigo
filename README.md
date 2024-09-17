@@ -8,11 +8,9 @@ Namsepace FTA has 3 sets of functions:
     Packed Scalar: same functions computing 4 or 8 values at the same time (using SSE4.1/FMA if available)
   
 
-FTA Accuracy:
+Max error:
 
-    FTA::sqrt/sqrt_ps max error: 0%
-    FTA::atan2/atan2_ps max error: 0.0005%
-    FTA::cos/cos_ps max error: 0.0007%
+    FTA::sin_ps/cos_ps/sin_2pi_ps/cos_2pi_ps - < 10^{-5}
     FTA::sin/sin_ps max error: 0.0007%
 
 FTA Speed up (SSE, MSVC2012 x64):
