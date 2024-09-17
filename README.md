@@ -2,10 +2,9 @@ FastTrigo 1.0 (c) 2013 Robin Lobel
 =========
 Fast yet accurate trigonometric functions
 
-Namsepace FTA has 3 sets of functions:
+Namespace FTA has 2 sets of functions:
 
-    Scalar: standard trigonometric functions
-    Packed Scalar: same functions computing 4 or 8 values at the same time (using SSE4.1/FMA if available)
+    Packed Scalar: sin/cos functions computing 4 to 16 values at the same time (using FMA/AVX512 instruction sets)
   
 
 Max error:
