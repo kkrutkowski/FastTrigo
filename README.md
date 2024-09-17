@@ -15,7 +15,7 @@ Max error:
 
 FTA Speed up (FMA, AMD Ryzen 4600h, g++ 13.2, -O3):
 
-    FTA::sin_ps/cos_ps speed max up: x25 (from standard sin + cos)
-    FTA::sin_2pi_ps/cos_2pi_ps speed max up: x32 (from standard sin + cos)
+    FTA::sin_ps/cos_ps max speed up: x25 (from standard sin + cos)
+    FTA::sin_2pi_ps/cos_2pi_ps max speed up: x32 (from standard sin + cos)
 
 Distributed under Revised BSD License
