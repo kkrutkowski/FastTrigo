@@ -11,7 +11,7 @@ Namsepace FTA has 3 sets of functions:
 Max error:
 
     FTA::sin_ps/cos_ps/sin_2pi_ps/cos_2pi_ps - < 1e-5
-    FTA::sin/sin_ps max error: 0.0007%
+    FTA::sin_pd/cos_pd/sin_2pi_pd/cos_2pi_pd - < 1e-12
 
 FTA Speed up (FMA, AMD Ryzen 4600h, g++ 13.2, -O3):
 
