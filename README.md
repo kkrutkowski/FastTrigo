@@ -1,7 +1,7 @@
 FastTrigo 1.0 (c) 2013 Robin Lobel
 =========
 Modified FMA/AVX512 implementations
-=========
+---------
 Fast yet accurate trigonometric functions
 
 Namespace FTA has 2 sets of functions:
