@@ -26,25 +26,25 @@ static const __m256 AVX_SIGNMASK =  _mm256_castsi256_ps(_mm256_set1_epi32(0x8000
 
 //SCALAR
 namespace FTA{
-    __m256 sqrt_ps(__m256 squared);
-    __m256 cos_52s_ps(__m256 x);
-    __m256 cos_ps(__m256 angle);
-    __m256 sin_ps(__m256 angle);
-    void sincos_ps(__m256, __m256*, __m256*);
+    __m256 sqrt(__m256 squared);
+    __m256 cos_52(__m256 x);
+    __m256 cos(__m256 angle);
+    __m256 sin(__m256 angle);
+    void sincos(__m256, __m256*, __m256*);
 }
 
 
 
-__m256 FTA::sqrt_ps(__m256 squared){
+__m256 FTA::sqrt(__m256 squared){
     return _mm256_sqrt_ps(squared);
 }
 
 // FMA implementation
-__m256 FTA::cos_52s_ps(__m256 x) {
-    const __m256 c1 = _mm256_set1_ps(0.9999932946f);
-    const __m256 c2 = _mm256_set1_ps(-0.4999124376f);
-    const __m256 c3 = _mm256_set1_ps(0.0414877472f);
-    const __m256 c4 = _mm256_set1_ps(-0.0012712095f);
+__m256 FTA::cos_52(__m256 x) {
+    const __m256 c1 = _mm256_set1_ps(9.99996748424514608493904342371928799e-01f);
+    const __m256 c2 = _mm256_set1_ps(-4.99926885961409551350860301487563489e-01f);
+    const __m256 c3 = _mm256_set1_ps(4.15007402641074982896429010192022451e-02f);
+    const __m256 c4 = _mm256_set1_ps(-1.27439641270480759760246083831391933e-03);
     __m256 x2 = _mm256_mul_ps(x, x);
 
     // Using FMA instructions for more efficient computation
@@ -55,7 +55,7 @@ __m256 FTA::cos_52s_ps(__m256 x) {
     return result;
 }
 
-__m256 FTA::cos_ps(__m256 angle){
+__m256 FTA::cos(__m256 angle){
     //clamp to the range 0..2pi
 
     //take absolute value
@@ -69,18 +69,18 @@ __m256 FTA::cos_ps(__m256 angle){
     cosangle=_mm256_xor_ps(cosangle,_mm256_and_ps(_mm256_cmp_ps(angle,_mm256_set1_ps(pi), _CMP_GE_OQ), AVX_SIGNMASK));
     cosangle=_mm256_xor_ps(cosangle, _mm256_and_ps(_mm256_cmp_ps(angle,_mm256_set1_ps(threehalfpi), _CMP_GE_OQ), _mm256_xor_ps(cosangle,_mm256_sub_ps(_mm256_set1_ps(twopi),angle))));
 
-    __m256 result=FTA::cos_52s_ps(cosangle);
+    __m256 result=FTA::cos_52(cosangle);
 
     result=_mm256_xor_ps(result,_mm256_and_ps(_mm256_and_ps(_mm256_cmp_ps(angle,_mm256_set1_ps(halfpi), _CMP_GE_OQ),_mm256_cmp_ps(angle,_mm256_set1_ps(threehalfpi), _CMP_LT_OQ)), AVX_SIGNMASK));
     return result;
 }
 
-__m256 FTA::sin_ps(__m256 angle){
-    return FTA::cos_ps(_mm256_sub_ps(_mm256_set1_ps(halfpi),angle));
+__m256 FTA::sin(__m256 angle){
+    return FTA::cos(_mm256_sub_ps(_mm256_set1_ps(halfpi),angle));
 }
 
 
-void FTA::sincos_ps(__m256 angle, __m256 *sin, __m256 *cos){
+void FTA::sincos(__m256 angle, __m256 *sin, __m256 *cos){
     __m256 anglesign=_mm256_or_ps(_mm256_set1_ps(1.f),_mm256_and_ps(AVX_SIGNMASK,angle));
     //clamp to the range 0..2pi
 
@@ -96,14 +96,13 @@ void FTA::sincos_ps(__m256 angle, __m256 *sin, __m256 *cos){
     cosangle=_mm256_xor_ps(cosangle,_mm256_and_ps(_mm256_cmp_ps(angle,_mm256_set1_ps(pi), _CMP_GE_OQ),AVX_SIGNMASK));
     cosangle=_mm256_xor_ps(cosangle, _mm256_and_ps(_mm256_cmp_ps(angle,_mm256_set1_ps(threehalfpi), _CMP_GE_OQ), _mm256_xor_ps(cosangle,_mm256_sub_ps(_mm256_set1_ps(twopi),angle))));
 
-    __m256 result=FTA::cos_52s_ps(cosangle);
+    __m256 result=FTA::cos_52(cosangle);
 
     result=_mm256_xor_ps(result,_mm256_and_ps(_mm256_and_ps(_mm256_cmp_ps(angle,_mm256_set1_ps(halfpi), _CMP_GE_OQ),_mm256_cmp_ps(angle,_mm256_set1_ps(threehalfpi), _CMP_LT_OQ)), AVX_SIGNMASK));
     *cos=result;
 
     __m256 sinmultiplier=_mm256_mul_ps(anglesign,_mm256_or_ps(_mm256_set1_ps(1.f),_mm256_and_ps(_mm256_cmp_ps(angle,_mm256_set1_ps(pi), _CMP_GE_OQ),AVX_SIGNMASK)));
-    *sin=_mm256_mul_ps(sinmultiplier,FTA::sqrt_ps(_mm256_fnmadd_ps(result, result, _mm256_set1_ps(1.f))));
-    //*sin=_mm256_mul_ps(sinmultiplier,FTA::sqrt_ps(_mm256_sub_ps(_mm256_set1_ps(1.f),_mm256_mul_ps(result,result))));
+    *sin=_mm256_mul_ps(sinmultiplier,FTA::sqrt(_mm256_fnmadd_ps(result, result, _mm256_set1_ps(1.f))));
 
     return;
 }
